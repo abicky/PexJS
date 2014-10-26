@@ -8,8 +8,27 @@
 	<script type="text/javascript" src="../js/<%=pexname%>"></script>
 	<script type="text/javascript">
 	window.onload = function() {
+		window.profileResults = {};
 		var option = <%-(option?option:"{}")%>;
 		var pex = new Pex("<%=basename%>.swf", "container", option);
+		var api = pex.getAPI();
+		var totalframe;
+		api.ready(function() {
+			totalframe = api.getTotalFrames();
+			api.engineStart();
+		});
+
+		api.addEventListener("enterframe", function(api, name, currentframe) {
+			if (currentframe === totalframe) {
+				var results = [];
+				for (var key in window.profileResults) {
+					results.push(key + ": " + window.profileResults[key]);
+				}
+				api.engineStop();
+				document.body.innerHTML = results.join("<br>");
+				document.body.style.color = "white";
+			}
+		}, "/");
 	};
 	</script>
 </head>

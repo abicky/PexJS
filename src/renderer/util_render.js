@@ -445,6 +445,7 @@ var transformImageColor = (function() {
 	if(tmpCtx.globalCompositeOperation === "difference") {
 		tmpCtx.globalCompositeOperation = "multiply";
 		if(tmpCtx.globalCompositeOperation === "multiply") {
+			alert("Use blend-mode");
 			return transformImageColorUsingBlendMode;
 		}
 	}

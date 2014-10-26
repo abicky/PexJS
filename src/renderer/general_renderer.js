@@ -22,7 +22,16 @@ var Renderer = function(engine) {
 	this.cachedClippingFunction = {};
 	this.rootScale = 1;
 	this.cacheController = new CacheController(engine.option.cacheMaxTotalSize);
-	this.transformImageColor = engine.option.cacheColoredImage? cacheTransformImageColor(this.cacheController): transformImageColor;
+	//this.transformImageColor = engine.option.cacheColoredImage? cacheTransformImageColor(this.cacheController): transformImageColor;
+	this.transformImageColor = function(cxformList, img) {
+		var profileKey = cxformList + "";
+		var start = Date.now();
+		var ret = transformImageColor(cxformList, img);
+		var elapsed = Date.now() - start;
+		window.profileResults[profileKey] || (window.profileResults[profileKey] = 0);
+		window.profileResults[profileKey] += elapsed;
+		return ret;
+	};
 };
 
 Renderer.calcScale = function(m) {
